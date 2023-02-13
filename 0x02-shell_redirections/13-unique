@@ -1,2 +1,2 @@
 #!/bin/bash
-sort | unqie -u | lpr
+sort | uniq -u | lpr
