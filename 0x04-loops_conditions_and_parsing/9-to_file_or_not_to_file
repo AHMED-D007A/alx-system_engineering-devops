@@ -7,10 +7,10 @@ then
 	if [ -s $FILE ]
 	then
 		echo "school file is empty"
-	elif [ ! -s $FILE ]
-	then
+	else
 		echo "school file is not empty"
-	elif [ -f $FILE ]
+	fi
+	if [ -f $FILE ]
 	then
 		echo "school is a reguler file"
 	fi
