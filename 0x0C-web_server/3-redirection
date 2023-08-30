@@ -2,6 +2,7 @@
 # When querying Nginx at its root / with a GET request it must return a page that contains the string Hello World!.
 sudo apt-get -y update
 sudo apt-get -y install nginx
+sudo service nginx start
 sudo echo "Hello World!" | sudo tee /var/www/html/index.nginx-debian.html
 sudo sed -i "s|server_name _;|server_name _;\n\trewrite ^/redirect_me https://github.com/Ahmed-D007A;|" /etc/nginx/sites-available/default
-sudo service nginx start
+sudo service nginx restart
