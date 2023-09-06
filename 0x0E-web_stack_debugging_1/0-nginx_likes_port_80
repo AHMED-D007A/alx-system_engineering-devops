@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Web stack debugging #1.
+sudo service nginx start
+sudo sed -i "s|listen|# listen|" /etc/nginx/sites-available/default
+sudo sed -i "s|server {|server {\n\tlisten 80 default_server;\n\tlisten [::]:80 default_server;|" /etc/nginx/sites-available/default
