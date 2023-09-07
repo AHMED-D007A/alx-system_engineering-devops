@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# a Bash script that will display information about subdomains.
+
+sub_domains=("www" "lb-01" "web-01" "web-02")
+
+check() {
+	url_arg=$1
+	sub_arg=$2
+
+	dig "$sub_arg.$url_arg" | grep -A1 'ANSWER SECTION:' | tail -1 | awk -v s="$sub_arg" 'BEGIN { FS = " " } ; { print "The subdomain " s " is a " $4 " record and points to " $5 }'
+}
+
+if [ $# -eq 1 ]; then
+	for subs in "${sub_domains[@]}"
+	do
+		check "$1" "$subs"
+	done
+elif [ $# -eq 2 ]; then
+	check "$1" "$2"
+fi
