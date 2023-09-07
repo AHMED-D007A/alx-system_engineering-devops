@@ -51,6 +51,6 @@ frontend www-https
 
 backend myservers
         balance roundrobin
-        server 283481-web-01 54.237.43.214:80 check
-        server 283481-web-02 54.208.103.110:80 check
+        server 291743-web-01 34.204.91.178:80 check
+        server 291743-web-02 54.86.227.214:80 check
         redirect scheme https code 301 unless { ssl_fc }
