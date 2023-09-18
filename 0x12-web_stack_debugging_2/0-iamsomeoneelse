@@ -3,5 +3,4 @@ if [[ $# -eq 0 ]]; then
 	echo "Usage: $0 <username>"
 	exit 1
 fi
-su - $1
-whoami
+sudo -u $1 whoami
