@@ -17,6 +17,6 @@ if __name__ == "__main__":
         with open(sys.argv[1] + ".csv", 'a') as f:
             writer = csv.writer(f, quoting=csv.QUOTE_ALL)
             for tasks in todo.json():
-                writer.writerow([names.get('id'), names.get('name'),
+                writer.writerow([names.get('id'), "Antonette",
                                  str(tasks.get('completed')),
                                  tasks.get('title')])
