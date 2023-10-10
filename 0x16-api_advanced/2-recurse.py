@@ -1,27 +1,35 @@
 #!/usr/bin/python3
 import requests
 """
-Module to interface with the reddit api
+recurse module.
 """
 
 
-def recurse(subreddit, after=None, all_results=[]):
+def recurse(subreddit, hot_list=[], after=""):
     """
-    Uses the reddit api to get the numbers of hot posts in a given subreddit
+    GET all titles of hot articles for a given subreddit.
+    Store results in hot_list provided as default to method.
+    Requires recursive request stores.
     """
-    param = {}
-    if after is not None:
-        param = {'after': after}
-    url = 'https://reddit.com/r/' + subreddit + '/hot/.json'
-    headers = {'User-Agent': "lala"}
-    r = requests.get(url, headers=headers, params=param)
-    try:
-        new_after = r.json()['data'].get('after')
-        for data in r.json()['data'].get('children'):
-            all_results.append(data['data'].get('title'))
-        if new_after is not None:
-            return(recurse(subreddit, new_after, all_results))
-        else:
-            return(all_results)
-    except Exception:
-        return(None)
+    if (after is None):
+        return hot_list
+
+    if (len(hot_list) == 0):
+        url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
+    else:
+        url = "https://www.reddit.com/r/{}/hot.json?after={}".format(
+            subreddit, after)
+    headers = {'user-agent': 'philsrequest'}
+
+    r = requests.get(url, headers=headers)
+    if (r.status_code is 404):
+        return None
+    elif 'data' not in r.json():
+        return None
+    else:
+        r = r.json()
+        for post in r['data']['children']:
+            hot_list.append(post['data']['title'])
+
+    after = r['data']['after']
+    return recurse(subreddit, hot_list, after)
