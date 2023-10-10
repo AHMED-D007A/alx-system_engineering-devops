@@ -1,18 +1,18 @@
 #!/usr/bin/python3
 import requests
-"""
-Module to interface with the reddit api
-"""
 
 
 def number_of_subscribers(subreddit):
-    """
-    Uses the reddit api to get the numbers of subscribers to a subreddit
-    """
-    url = 'https://reddit.com/r/' + subreddit + '/about/.json'
-    headers = {'User-Agent': "lala"}
+    """ GET subscriber count of a given subreddit """
+    url = "http://www.reddit.com/r/{}/about.json".format(subreddit)
+    headers = {'user-agent': 'philsrequest'}
     r = requests.get(url, headers=headers)
-    try:
-        return(r.json().get('data').get('subscribers'))
-    except:
-        return(0)
+    if (r.status_code is 302 or r.status_code is 404):
+        return 0
+    r = r.json()
+    if ('error' in r):
+        return 0
+    elif ('subscribers' in r['data']):
+        return r['data']['subscribers']
+    else:
+        return 0

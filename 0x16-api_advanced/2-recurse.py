@@ -23,5 +23,5 @@ def recurse(subreddit, after=None, all_results=[]):
             return(recurse(subreddit, new_after, all_results))
         else:
             return(all_results)
-    except:
+    except Exception:
         return(None)
