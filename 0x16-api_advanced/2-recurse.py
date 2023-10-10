@@ -1,35 +1,28 @@
 #!/usr/bin/python3
+""" Exporting csv files"""
+import json
 import requests
-"""
-recurse module.
-"""
+import sys
 
 
-def recurse(subreddit, hot_list=[], after=""):
-    """
-    GET all titles of hot articles for a given subreddit.
-    Store results in hot_list provided as default to method.
-    Requires recursive request stores.
-    """
-    if (after is None):
-        return hot_list
-
-    if (len(hot_list) == 0):
-        url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
+def recurse(subreddit, host_list=[], after="null"):
+    """Read reddit API and return top 10 hotspots """
+    username = 'ledbag123'
+    password = 'Reddit72'
+    user_pass_dict = {'user': username, 'passwd': password, 'api_type': 'json'}
+    headers = {'user-agent': '/u/ledbag123 API Python for Holberton School'}
+    payload = {"limit": "100", "after": after}
+    url = 'https://www.reddit.com/r/{}/hot.json'.format(subreddit)
+    client = requests.session()
+    client.headers = headers
+    r = client.get(url, allow_redirects=False, params=payload)
+    if r.status_code == 200:
+        list_titles = r.json()['data']['children']
+        after = r.json()['data']['after']
+        if after is not None:
+            host_list.append(list_titles[len(host_list)]['data']['title'])
+            recurse(subreddit, host_list, after)
+        else:
+            return(host_list)
     else:
-        url = "https://www.reddit.com/r/{}/hot.json?after={}".format(
-            subreddit, after)
-    headers = {'user-agent': 'philsrequest'}
-
-    r = requests.get(url, headers=headers)
-    if (r.status_code is 404):
-        return None
-    elif 'data' not in r.json():
-        return None
-    else:
-        r = r.json()
-        for post in r['data']['children']:
-            hot_list.append(post['data']['title'])
-
-    after = r['data']['after']
-    return recurse(subreddit, hot_list, after)
+        return(None)
